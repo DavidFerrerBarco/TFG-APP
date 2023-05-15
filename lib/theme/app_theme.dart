@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static const Color primary = Color(0xFF0C9860);
-  static const Color secondary = Color.fromARGB(255, 9, 202, 125);
+  static const Color secondary = Color(0xFF008B76);
   static final ThemeData lightTheme = ThemeData.light().copyWith(
     //Color primario
     primaryColor: primary,
@@ -27,6 +27,17 @@ class AppTheme {
         fontSize: 30,
         fontWeight: FontWeight.bold,
         color: Colors.white,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 15,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 19,
+        color: Colors.black,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
       ),
     ),
 

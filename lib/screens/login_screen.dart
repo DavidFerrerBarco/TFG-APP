@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:my_app/services/employee_services.dart';
+import 'package:my_app/services/storage.dart';
 import 'package:my_app/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
+import '../constants/constants.dart';
 import '../widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -82,7 +87,6 @@ class _Content extends StatelessWidget {
     final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
 
     final Map<String, String> formValues = {'dni': '1234', 'password': '1234'};
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 50, right: 20, left: 20),
@@ -133,19 +137,29 @@ class _Content extends StatelessWidget {
                           ),
                           const SizedBox(height: 80),
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               FocusScope.of(context).requestFocus(FocusNode());
 
                               if (!myFormKey.currentState!.validate()) {
                                 return;
                               }
-                              Navigator.pushNamed(context, 'home');
+                              var value = await EmployeeService().login(
+                                  formValues.values.elementAt(0),
+                                  formValues.values.elementAt(1));
+                              if (value != defaultemployee) {
+                                SecureStorage().writeSecureData('user', value);
+                                Navigator.pushReplacementNamed(context, 'home');
+                              }
                             },
                             style:
                                 AppTheme.lightTheme.elevatedButtonTheme.style,
-                            child: const SizedBox(
+                            child: SizedBox(
                               width: double.infinity,
-                              child: Center(child: Text('Iniciar Sesión')),
+                              child: Center(
+                                  child: Text(
+                                'Iniciar Sesión',
+                                style: AppTheme.lightTheme.textTheme.labelSmall,
+                              )),
                             ),
                           ),
                         ],
