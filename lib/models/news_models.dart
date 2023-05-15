@@ -3,7 +3,6 @@
 //     final newsModel = newsModelFromJson(jsonString);
 
 import 'dart:convert';
-
 import 'models.dart';
 
 class NewsModel {

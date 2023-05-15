@@ -24,3 +24,16 @@ final Schedule defaultschedule = Schedule(
   hoursCount: 0,
   v: 0,
 );
+
+final List<Task> defaulttask = [
+  Task(
+    id: "";
+    title: "",
+    content: "",
+    day: "",
+    employee: "",
+    status: "",
+    date: "",
+    v: 0,
+  ),
+];

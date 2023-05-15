@@ -4,3 +4,7 @@ export 'package:my_app/models/employee.dart';
 export 'package:my_app/models/employee_models.dart';
 export 'package:my_app/models/news.dart';
 export 'package:my_app/models/news_models.dart';
+export 'package:my_app/models/task_models.dart';
+export 'package:my_app/models/tasks.dart';
+export 'package:my_app/models/announcement_models.dart';
+export 'package:my_app/models/announcement.dart';

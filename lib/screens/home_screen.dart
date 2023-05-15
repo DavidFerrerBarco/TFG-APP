@@ -22,15 +22,46 @@ class _HomeScreenState extends State<HomeScreen> {
   bool mostrarBotones = true;
   DateTime day = DateTime.now();
   Schedule horario = defaultschedule;
+  List<Task> tareas = defaulttask;
+
+  // CREAMOS LA LISTA DE HORARIOS QUE COINCIDAN CON HOY
+  List<Schedule> obtenerListaHHoy(List<Schedule> listaHorario){
+    return listaHorario.where((element) => element.day == day.toString().substring(0,10));
+  }
+
+  // CREAMOS LA LISTA DE TAREAS QUE COINCIDAN CON HOY
+  List<Task> obtenerListaHoy(List<Task> listaTarea){
+    return listaTarea.where((element) => element.day == day.toString().substring(0,10));
+  }
+
+  //SI EXISTE UNO, LO PONE, SI NO, ESTABLECE EL DEFAULT
+  Schedule settearHorarioDia(List<Schedule> lista){
+    return lista.isNotEmpty ? lista.first : defaultschedule;
+  }
+
+  List<Task> settearTareasDia(List<Task> tareas){
+    return tareas.length > 0 ? tareas : defaulttask;
+  }
 
   void setDate(DateTime date, List<Schedule> listaHorario) {
     setState(() {
       day = date;
-      var lista = listaHorario
-          .where((element) => element.day == day.toString().substring(0, 10));
-      horario = lista.isNotEmpty ? lista.first : defaultschedule;
+      var listaH = obtenerListaHHoy(listaHorario);
+      horario = settearHorarioDia(listaH);
+      var listaT = obtenerListaTHoy(listaTarea);
+      tareas = settearTareasHoy(listaT); 
       mostrarBotones = date.day == DateTime.now().day;
     });
+  }
+
+  // FUNCION PARA SETTEAR VALORES DE HOY;
+  void setAllData(List<Schedule> listaHorario, List<Task> listaTarea){
+    setState(() {
+      var listaH = obtenerListaHHoy(listaHorario);
+      horario = settearHorarioDia(listaH);
+      var listaT = obtenerListaTHoy(listaTarea);
+      tareas = settearTareasHoy(listaT); 
+    })
   }
 
   @override
@@ -39,7 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
     Employee empleado =
         Employee.fromJson(ModalRoute.of(context)!.settings.arguments as String);
     final listaHorario = Provider.of<ScheduleService>(context).listaHorario;
-
+    //LLAMAMOS A LA LISTA DEL TASKSERVICE
+    final listaTarea = Provider.of<TaskService>(context).listaTarea;
+    //LLAMAMOS A LA FUNCIÓN PARA INICIALIZAR EL HORARIO (NO SÉ SI SE QUEDA EN BUCLE TODO EL RATO)
+    setSchedule(listaHorario, listaTarea);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

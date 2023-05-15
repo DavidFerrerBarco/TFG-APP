@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/services/news_services.dart';
+import 'package:my_app/services/services.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets/widgets.dart';
 
 class NewsScreen extends StatelessWidget {

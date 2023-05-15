@@ -1,8 +1,7 @@
+import '../constants/constants.dart';
+import '../models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import '../models/models.dart';
-import '../constants/constants.dart';
 
 class NewsService extends ChangeNotifier {
   List<News> onDisplayNews = [];

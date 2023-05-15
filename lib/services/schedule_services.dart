@@ -1,11 +1,9 @@
+import '../constants/constants.dart';
+import '../models/models.dart';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/services/storage.dart';
-
-import '../models/models.dart';
-import '../constants/constants.dart';
 
 class ScheduleService extends ChangeNotifier {
   List<Schedule> listaHorario = [];

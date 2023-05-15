@@ -1,12 +1,10 @@
+import 'models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/constants/constants.dart';
-import 'package:my_app/services/employee_services.dart';
-import 'package:my_app/services/news_services.dart';
-import 'package:my_app/services/schedule_services.dart';
 import 'package:my_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
-import 'models/models.dart';
 import 'screens/screens.dart';
+import 'services/services.dart';
 
 void main() => runApp(const AppState());
 
@@ -28,6 +26,12 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ScheduleService(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => TaskService();
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AnnouncementService();
+        )
       ],
       child: const MyApp(),
     );
