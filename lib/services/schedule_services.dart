@@ -1,12 +1,12 @@
 import '../constants/constants.dart';
 import '../models/models.dart';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/services/storage.dart';
 
 class ScheduleService extends ChangeNotifier {
   List<Schedule> listaHorario = [];
+  bool authorize = true;
 
   ScheduleService() {
     horarios();
@@ -23,8 +23,14 @@ class ScheduleService extends ChangeNotifier {
           'Authorization': 'Bearer ${empleado.token}',
         },
       );
-      final scheduleResponse = ScheduleModel.fromJson(response.body);
-      listaHorario = scheduleResponse.data;
+      if (response.statusCode == 401) {
+        authorize = false;
+      } else {
+        final scheduleResponse = ScheduleModel.fromJson(response.body);
+        listaHorario = scheduleResponse.data;
+      }
+    } else {
+      authorize = false;
     }
 
     notifyListeners();

@@ -31,7 +31,8 @@ class CustomInputField extends StatelessWidget {
     final InputDecorationTheme theme = AppTheme.lightTheme.inputDecorationTheme;
 
     return TextFormField(
-      style: TextStyle(color: Colors.black, backgroundColor: Colors.white),
+      style:
+          const TextStyle(color: Colors.black, backgroundColor: Colors.white),
       autofocus: true,
       textCapitalization: TextCapitalization.words,
       keyboardType: keyboardType,

@@ -24,13 +24,12 @@ class SplashScreen extends StatelessWidget {
             });
           } else {
             SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-              print(snapshot.data[0]);
               Navigator.pushReplacementNamed(context, 'home',
                   arguments: snapshot.data[0]);
             });
           }
         }
-        return Text('loading...');
+        return const Text('loading...');
       },
     );
   }

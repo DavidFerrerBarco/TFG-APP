@@ -2,7 +2,6 @@
 //
 //     final employeeModel = employeeModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 import 'package:my_app/models/models.dart';

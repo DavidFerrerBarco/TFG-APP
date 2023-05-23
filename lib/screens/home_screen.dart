@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/constants/constants.dart';
-import 'package:my_app/models/employee.dart';
-import 'package:my_app/services/schedule_services.dart';
 import 'package:my_app/services/storage.dart';
 import 'package:my_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
+import '../services/services.dart';
+import '../widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,44 +22,45 @@ class _HomeScreenState extends State<HomeScreen> {
   Schedule horario = defaultschedule;
   List<Task> tareas = defaulttask;
 
-  // CREAMOS LA LISTA DE HORARIOS QUE COINCIDAN CON HOY
-  List<Schedule> obtenerListaHHoy(List<Schedule> listaHorario){
-    return listaHorario.where((element) => element.day == day.toString().substring(0,10));
+  List<Schedule> obtenerListaHHoy(List<Schedule> listaHorario) {
+    return listaHorario
+        .where((element) => element.day == day.toString().substring(0, 10))
+        .toList();
   }
 
-  // CREAMOS LA LISTA DE TAREAS QUE COINCIDAN CON HOY
-  List<Task> obtenerListaHoy(List<Task> listaTarea){
-    return listaTarea.where((element) => element.day == day.toString().substring(0,10));
+  List<Task> obtenerListaTHoy(List<Task> listaTarea) {
+    return listaTarea
+        .where((element) => element.day == day.toString().substring(0, 10))
+        .toList();
   }
 
-  //SI EXISTE UNO, LO PONE, SI NO, ESTABLECE EL DEFAULT
-  Schedule settearHorarioDia(List<Schedule> lista){
+  Schedule settearHorarioDia(List<Schedule> lista) {
     return lista.isNotEmpty ? lista.first : defaultschedule;
   }
 
-  List<Task> settearTareasDia(List<Task> tareas){
-    return tareas.length > 0 ? tareas : defaulttask;
+  List<Task> settearTareasDia(List<Task> tareas) {
+    return tareas.isNotEmpty ? tareas : defaulttask;
   }
 
-  void setDate(DateTime date, List<Schedule> listaHorario) {
+  void setDate(
+      DateTime date, List<Schedule> listaHorario, List<Task> listaTarea) {
     setState(() {
       day = date;
       var listaH = obtenerListaHHoy(listaHorario);
       horario = settearHorarioDia(listaH);
       var listaT = obtenerListaTHoy(listaTarea);
-      tareas = settearTareasHoy(listaT); 
+      tareas = settearTareasDia(listaT);
       mostrarBotones = date.day == DateTime.now().day;
     });
   }
 
-  // FUNCION PARA SETTEAR VALORES DE HOY;
-  void setAllData(List<Schedule> listaHorario, List<Task> listaTarea){
+  void setAllData(List<Schedule> listaHorario, List<Task> listaTarea) {
     setState(() {
       var listaH = obtenerListaHHoy(listaHorario);
       horario = settearHorarioDia(listaH);
       var listaT = obtenerListaTHoy(listaTarea);
-      tareas = settearTareasHoy(listaT); 
-    })
+      tareas = settearTareasDia(listaT);
+    });
   }
 
   @override
@@ -70,10 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Employee empleado =
         Employee.fromJson(ModalRoute.of(context)!.settings.arguments as String);
     final listaHorario = Provider.of<ScheduleService>(context).listaHorario;
-    //LLAMAMOS A LA LISTA DEL TASKSERVICE
     final listaTarea = Provider.of<TaskService>(context).listaTarea;
-    //LLAMAMOS A LA FUNCIÓN PARA INICIALIZAR EL HORARIO (NO SÉ SI SE QUEDA EN BUCLE TODO EL RATO)
-    setSchedule(listaHorario, listaTarea);
+    setAllData(listaHorario, listaTarea);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -91,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.inbox_rounded),
           ),
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, 'messages'),
+            onPressed: () =>
+                Navigator.pushNamed(context, 'messages', arguments: empleado),
             icon: const Icon(Icons.chat),
           ),
         ],
@@ -102,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(children: [
           Stack(
             children: [
-              TopTag(size: size),
+              TopTag(size: size, empleado: empleado),
             ],
           ),
           Calendar(
@@ -111,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
             setDate: setDate,
             day: day,
             listaHorarios: listaHorario,
+            listaTareas: listaTarea,
           ),
           ScheduleTag(hora: horario.hours),
           Container(
@@ -123,25 +122,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottomRight: Radius.circular(20),
               ),
             ),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(Icons.book, size: 30),
-                  title: const Text('Título: Comprar el pan'),
-                  trailing: IconButton(
-                    onPressed: () => Navigator.pushNamed(context, 'task'),
-                    icon: const Icon(Icons.arrow_forward_ios_outlined),
-                  ),
-                  iconColor: Colors.white,
-                  subtitle: const Text(
-                    'Estado: Pendiente',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                );
-              },
-            ),
+            child: tareas.isNotEmpty
+                ? ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: tareas.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: const Icon(Icons.book, size: 30),
+                        title: Text('Título: ${tareas[index].title}'),
+                        trailing: IconButton(
+                          onPressed: () => Navigator.pushNamed(context, 'task'),
+                          icon: const Icon(Icons.arrow_forward_ios_outlined),
+                        ),
+                        iconColor: Colors.white,
+                        subtitle: Text(
+                          'Estado: ${tareas[index].status}',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      );
+                    },
+                  )
+                : Center(
+                    child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      "No hay tareas asignadas para el ${day.toLocal().toString().substring(0, 10)}",
+                      textAlign: TextAlign.center,
+                    ),
+                  )),
           ),
           if (mostrarBotones)
             Padding(
@@ -190,9 +198,11 @@ class TopTag extends StatelessWidget {
   const TopTag({
     super.key,
     required this.size,
+    required this.empleado,
   });
 
   final Size size;
+  final Employee empleado;
 
   @override
   Widget build(BuildContext context) {
@@ -208,18 +218,17 @@ class TopTag extends StatelessWidget {
       ),
       child: Row(children: [
         Text(
-          '¡Hola David!',
+          '¡Hola ${empleado.name.split(' ')[0]}!',
           style: AppTheme.lightTheme.textTheme.titleSmall!
               .copyWith(color: Colors.white),
         ),
         const Spacer(),
-        const CircleAvatar(
-          backgroundColor: Colors.white,
+        CircularIconAvatar(
+          name: empleado.name,
           radius: 30,
-          child: Text(
-            'DF',
-            style: TextStyle(fontSize: 25, color: AppTheme.primary),
-          ),
+          fontSize: 25,
+          backgroundColor: Colors.white,
+          textColor: AppTheme.primary,
         )
       ]),
     );
@@ -242,7 +251,7 @@ class ScheduleTag extends StatelessWidget {
         leading: const Icon(Icons.work_history_sharp),
         title: Text(
           horaTag,
-          style: TextStyle(fontSize: 21),
+          style: const TextStyle(fontSize: 21),
         ),
         subtitle:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -279,6 +288,7 @@ class Calendar extends StatelessWidget {
     required this.setDate,
     required this.day,
     required this.listaHorarios,
+    required this.listaTareas,
   });
 
   final Size size;
@@ -286,6 +296,7 @@ class Calendar extends StatelessWidget {
   final DateTime inicialDate;
   final Function setDate;
   final List<Schedule> listaHorarios;
+  final List<Task> listaTareas;
 
   @override
   Widget build(BuildContext context) {
@@ -293,9 +304,7 @@ class Calendar extends StatelessWidget {
       initialDate: day,
       firstDate: DateTime(2020, 01, 01),
       lastDate: DateTime(2024, 12, 31),
-      onDateSelected: (p0) {
-        setDate(p0, listaHorarios);
-      },
+      onDateSelected: (p0) => setDate(p0, listaHorarios, listaTareas),
       activeDayColor: Colors.white,
       activeBackgroundDayColor: AppTheme.primary,
       dayColor: AppTheme.primary,

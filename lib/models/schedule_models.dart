@@ -2,7 +2,6 @@
 //
 //     final scheduleModel = scheduleModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 import 'models.dart';

@@ -25,15 +25,6 @@ final Schedule defaultschedule = Schedule(
   v: 0,
 );
 
-final List<Task> defaulttask = [
-  Task(
-    id: "";
-    title: "",
-    content: "",
-    day: "",
-    employee: "",
-    status: "",
-    date: "",
-    v: 0,
-  ),
-];
+final List<Task> defaulttask = [];
+
+final List<Employee> defaultemployees = [];

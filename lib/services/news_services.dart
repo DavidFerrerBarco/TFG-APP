@@ -14,10 +14,12 @@ class NewsService extends ChangeNotifier {
     var url = Uri.http(baseUrl, '/api/news');
 
     final response = await http.get(url);
-    final newsResponse = NewsModel.fromJson(response.body);
+    if (response.statusCode == 200) {
+      final newsResponse = NewsModel.fromJson(response.body);
 
-    onDisplayNews = newsResponse.data;
+      onDisplayNews = newsResponse.data;
 
-    notifyListeners();
+      notifyListeners();
+    }
   }
 }

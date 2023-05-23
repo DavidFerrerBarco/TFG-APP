@@ -8,7 +8,8 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final announcementProvider = Provider.of<AnnouncementService>(context).onDisplayAnnouncements;
+    final announcementProvider =
+        Provider.of<AnnouncementService>(context).onDisplayAnnouncements;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: const Text('Announcements')),

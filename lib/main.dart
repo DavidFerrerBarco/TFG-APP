@@ -1,6 +1,4 @@
-import 'models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/constants/constants.dart';
 import 'package:my_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'screens/screens.dart';
@@ -16,6 +14,10 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (_) => AnnouncementService(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
           create: (_) => NewsService(),
           lazy: false,
         ),
@@ -25,13 +27,16 @@ class AppState extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ScheduleService(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (_) => TaskService();
+          create: (_) => TaskService(),
+          lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (_) => AnnouncementService();
-        )
+          create: (_) => MessagesService(),
+          lazy: false,
+        ),
       ],
       child: const MyApp(),
     );
@@ -55,6 +60,7 @@ class MyApp extends StatelessWidget {
         'news': (_) => const NewsScreen(),
         'notifications': (_) => const NotificationScreen(),
         'task': (_) => const TaskScreen(),
+        'chat': (_) => const ChatScreen(),
       },
       theme: AppTheme.lightTheme,
     );

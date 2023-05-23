@@ -1,27 +1,37 @@
+import 'package:my_app/services/storage.dart';
+
 import '../constants/constants.dart';
 import '../models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AnnouncementService extends ChangeNotifier{
+class AnnouncementService extends ChangeNotifier {
   List<Announcement> onDisplayAnnouncements = [];
 
-  AnnouncementService(){
+  AnnouncementService() {
     getAllAnnouncement();
   }
 
   getAllAnnouncement() async {
-    var empleado = Employee.fromJson(await SecureStorage().readSecureData('user'));
-    var company = empleado.company.replace(' ', '-');
-    if(empleado.token != null){
-      var url = Uri.http(baseUrl, '/api/announcement/company/$company')
+    var empleado =
+        Employee.fromJson(await SecureStorage().readSecureData('user'));
+    String company = empleado.company.replaceAll(' ', '-');
+    if (empleado.token != null) {
+      var url = Uri.http(baseUrl, '/api/announcement/company/$company');
 
-      final response = await http.get(url);
-      final announcementResponse = AnnouncementModel.fromJson(response.body);
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer ${empleado.token}',
+        },
+      );
+      if (response.statusCode == 200) {
+        final announcementResponse = AnnouncementModel.fromJson(response.body);
 
-      onDisplayAnnouncements = announcementResponse.data;
+        onDisplayAnnouncements = announcementResponse.data;
 
-      notifyListeners();
+        notifyListeners();
+      }
     }
   }
 }

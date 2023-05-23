@@ -1,4 +1,4 @@
-#Mon May 15 00:10:54 CEST 2023
+#Sun May 21 23:46:11 CEST 2023
 base.0=C\:\\Users\\DeiviTY\\Clases\\TFG\\TFG-APP\\my_app\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:my_app/services/employee_services.dart';
 import 'package:my_app/services/storage.dart';
 import 'package:my_app/theme/app_theme.dart';
-import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -36,8 +34,7 @@ class _BackGround extends StatelessWidget {
   final double bottom;
 
   const _BackGround(
-      {super.key,
-      required this.primaryColor,
+      {required this.primaryColor,
       required this.secondaryColor,
       required this.right,
       required this.bottom});
@@ -62,7 +59,7 @@ class _BackGround extends StatelessWidget {
 class _ColorBoxRotated extends StatelessWidget {
   final Color color;
 
-  const _ColorBoxRotated({super.key, required this.color});
+  const _ColorBoxRotated({required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +75,7 @@ class _ColorBoxRotated extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({
-    super.key,
-  });
+  const _Content();
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +95,7 @@ class _Content extends StatelessWidget {
             ),
             const SizedBox(height: 100),
             Padding(
-              padding: EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: 30),
               child: Text(
                 "Iniciar Sesión",
                 style: AppTheme.lightTheme.textTheme.bodyMedium,
@@ -113,13 +108,14 @@ class _Content extends StatelessWidget {
                   BoxDecoration(borderRadius: BorderRadius.circular(50)),
               clipBehavior: Clip.antiAlias,
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Scaffold(
                   resizeToAvoidBottomInset: false,
                   body: Form(
                     key: myFormKey,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 30, right: 30, top: 40),
+                      padding:
+                          const EdgeInsets.only(left: 30, right: 30, top: 40),
                       child: Column(
                         children: [
                           CustomInputField(
@@ -148,7 +144,8 @@ class _Content extends StatelessWidget {
                                   formValues.values.elementAt(1));
                               if (value != defaultemployee) {
                                 SecureStorage().writeSecureData('user', value);
-                                Navigator.pushReplacementNamed(context, 'home');
+                                Navigator.pushReplacementNamed(
+                                    context, 'splash');
                               }
                             },
                             style:
