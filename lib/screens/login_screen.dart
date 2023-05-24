@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:my_app/services/employee_services.dart';
 import 'package:my_app/services/storage.dart';
@@ -15,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: const [
-        _BackGround(
+        BackGround(
           primaryColor: Color.fromARGB(255, 223, 223, 223),
           secondaryColor: AppTheme.primary,
           right: 100,
@@ -23,53 +21,6 @@ class LoginScreen extends StatelessWidget {
         ),
         _Content(),
       ],
-    );
-  }
-}
-
-class _BackGround extends StatelessWidget {
-  final Color primaryColor;
-  final Color secondaryColor;
-  final double right;
-  final double bottom;
-
-  const _BackGround(
-      {required this.primaryColor,
-      required this.secondaryColor,
-      required this.right,
-      required this.bottom});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(color: primaryColor),
-        Positioned(
-          right: right,
-          bottom: bottom,
-          child: _ColorBoxRotated(
-            color: secondaryColor,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ColorBoxRotated extends StatelessWidget {
-  final Color color;
-
-  const _ColorBoxRotated({required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: pi / 5,
-      child: Container(
-        width: 600,
-        height: 1000,
-        color: color,
-      ),
     );
   }
 }
