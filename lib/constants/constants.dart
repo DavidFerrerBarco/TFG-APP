@@ -1,7 +1,8 @@
 import '../models/models.dart';
 
-const baseUrl = '192.168.0.21:3000';
-
+const mobileUrl = '192.168.0.21:3000';
+const virtualMobileUrl = '10.0.2.2:3000';
+const baseUrl = virtualMobileUrl;
 final Employee defaultemployee = Employee(
   id: "",
   name: "",
@@ -10,7 +11,6 @@ final Employee defaultemployee = Employee(
   company: "",
   contract: 0,
   admin: false,
-  image: "",
   email: "",
   v: 0,
   token: null,
@@ -25,6 +25,32 @@ final Schedule defaultschedule = Schedule(
   v: 0,
 );
 
-final List<Task> defaulttask = [];
+final News defaultnews = News(
+  id: '',
+  title: '',
+  content: '',
+  date: '',
+  v: 0,
+);
+
+final Announcement defaultannouncement = Announcement(
+  id: '',
+  title: '',
+  content: '',
+  company: '',
+  date: '',
+  v: 0,
+);
+
+final Message defaultmessage = Message(
+  id: '',
+  sender: '',
+  receiver: '',
+  content: '',
+  date: '',
+  v: 0,
+);
+
+final List<Task> defaulttasks = [];
 
 final List<Employee> defaultemployees = [];

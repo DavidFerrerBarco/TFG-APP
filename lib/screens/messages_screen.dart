@@ -1,8 +1,7 @@
-import 'package:my_app/theme/app_theme.dart';
-
 import '../models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/services/services.dart';
+import 'package:my_app/constants/constants.dart';
+import 'package:my_app/providers/providers.dart';
 import 'package:my_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -11,33 +10,54 @@ class MessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Employee> employees =
-        Provider.of<EmployeeService>(context).onDisplayEmployees;
+    final EmployeesProvider employeesProvider =
+        Provider.of<EmployeesProvider>(context);
     Employee empleado = ModalRoute.of(context)!.settings.arguments as Employee;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: const Text('Messages')),
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: ListView.separated(
-          scrollDirection: Axis.vertical,
-          itemCount: employees.length,
-          separatorBuilder: (context, index) {
-            return employees[index].id != empleado.id
-                ? const Divider(
-                    color: Colors.grey,
-                  )
-                : Container();
-          },
-          itemBuilder: (context, index) {
-            return employees[index].id != empleado.id
-                ? CustomCardMessage(
-                    employee: employees[index], myEmployee: empleado)
-                : Container();
-          },
-        ),
-      ),
+      body: StreamBuilder(
+          stream: employeesProvider.getEmpleados(empleado),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              List<Employee> empleados = snapshot.data!;
+              if (empleados != [defaultemployee]) {
+                return SizedBox(
+                  width: size.width,
+                  height: size.height,
+                  child: ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    itemCount: empleados.length,
+                    separatorBuilder: (context, index) {
+                      return empleados[index].id != empleado.id
+                          ? const Divider(
+                              color: Colors.grey,
+                            )
+                          : Container();
+                    },
+                    itemBuilder: (context, index) {
+                      return empleados[index].id != empleado.id
+                          ? CustomCardMessage(
+                              employee: empleados[index],
+                              myEmployee: empleado,
+                            )
+                          : Container();
+                    },
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    "NO HAY MÁS EMPLEADOS",
+                    style: TextStyle(color: Colors.black, fontSize: 25),
+                  ),
+                );
+              }
+            } else {
+              return const CustomCircularProgress();
+            }
+          }),
     );
   }
 }

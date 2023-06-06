@@ -1,36 +1,53 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_app/constants/constants.dart';
-import 'package:my_app/services/storage.dart';
+import 'package:my_app/models/models.dart';
+import 'package:my_app/providers/providers.dart';
+import 'package:my_app/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
-  static Future<void> fetchUserData() {
-    return SecureStorage().readSecureData('user');
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future.wait([SplashScreen.fetchUserData()]),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+    final SplashProvider splashProvider = Provider.of<SplashProvider>(context);
+
+    return StreamBuilder(
+      stream: splashProvider.loading,
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data[0] == jsonEncode(defaultemployee)) {
+          Employee employee = snapshot.data!;
+          if (employee == defaultemployee) {
             SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
               Navigator.pushReplacementNamed(context, 'login');
             });
           } else {
             SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
               Navigator.pushReplacementNamed(context, 'home',
-                  arguments: snapshot.data[0]);
+                  arguments: employee);
             });
           }
         }
-        return const Text('loading...');
+        return const CustomCircularProgress();
       },
+    );
+  }
+}
+
+class CustomCircularProgress extends StatelessWidget {
+  const CustomCircularProgress({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          color: AppTheme.primary,
+        ),
+      ),
     );
   }
 }

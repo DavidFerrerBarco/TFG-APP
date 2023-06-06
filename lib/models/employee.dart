@@ -8,7 +8,6 @@ class Employee {
   String company;
   int contract;
   bool admin;
-  String image;
   String email;
   int v;
   String? token;
@@ -21,7 +20,6 @@ class Employee {
     required this.company,
     required this.contract,
     required this.admin,
-    required this.image,
     required this.email,
     required this.v,
     this.token,
@@ -37,7 +35,6 @@ class Employee {
         company: json["company"],
         contract: json["contract"],
         admin: json["admin"],
-        image: json["image"],
         email: json["email"],
         v: json["__v"],
         token: json["token"],
@@ -51,7 +48,6 @@ class Employee {
         "company": company,
         "contract": contract,
         "admin": admin,
-        "image": image,
         "email": email,
         "__v": v,
         "token": token,

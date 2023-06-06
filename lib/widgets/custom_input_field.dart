@@ -1,62 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_app/theme/app_theme.dart';
 
-class CustomInputField extends StatelessWidget {
+// ignore: must_be_immutable
+class CustomInputField extends StatefulWidget {
+  final TextEditingController controller;
   final String? hintText;
   final String? labelText;
   final String? helperText;
-  final IconData? icon;
+  final IconData? prefixIcon;
   final IconData? suffixIcon;
   final TextInputType? keyboardType;
-  final bool isPassword;
-
+  bool isPassword;
+  final bool? allowPassword;
+  final List<TextInputFormatter>? inputFormatters;
+  final Function? onPressed;
   final String formProperty;
-  final Map<String, String> formValues;
+  final Map<String, dynamic> formValues;
+  final int? maxLines;
+  final bool? readOnly;
 
-  const CustomInputField({
+  CustomInputField({
     super.key,
     this.hintText,
     this.labelText,
     this.helperText,
-    this.icon,
+    this.prefixIcon,
     this.suffixIcon,
     this.keyboardType,
     this.isPassword = false,
     required this.formProperty,
     required this.formValues,
+    required this.controller,
+    this.inputFormatters,
+    this.onPressed,
+    this.allowPassword = false,
+    this.maxLines,
+    this.readOnly,
   });
+
+  @override
+  State<CustomInputField> createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<CustomInputField> {
+  void onPasswordVisualize() {
+    setState(() {
+      widget.isPassword = !widget.isPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final InputDecorationTheme theme = AppTheme.lightTheme.inputDecorationTheme;
 
     return TextFormField(
-      style:
-          const TextStyle(color: Colors.black, backgroundColor: Colors.white),
+      readOnly: widget.readOnly ?? false,
+      controller: widget.controller,
+      style: const TextStyle(
+          color: Colors.black, backgroundColor: Colors.white, fontSize: 18),
       autofocus: true,
       textCapitalization: TextCapitalization.words,
-      keyboardType: keyboardType,
-      obscureText: isPassword,
+      keyboardType: widget.keyboardType,
+      obscureText: widget.isPassword,
       onChanged: (value) {
-        formValues[formProperty] = value;
+        widget.formValues[widget.formProperty] = value;
       },
       validator: (value) {
-        if (value == null) return 'Este campo es requerido';
-        return value.length < 3 ? 'Mínimo de 3 letras' : null;
+        if (value != null && value.length < 3) {
+          return 'Mínimo 3 caractéres';
+        } else {
+          return null;
+        }
       },
       decoration: InputDecoration(
         filled: true,
-        hintText: hintText,
-        labelText: labelText,
-        helperText: helperText,
-        suffixIcon: suffixIcon == null ? null : Icon(suffixIcon),
-        icon: icon == null ? null : Icon(icon),
+        hintText: widget.hintText,
+        labelText: widget.labelText,
+        helperText: widget.helperText,
+        suffixIcon: widget.suffixIcon == null
+            ? null
+            : IconButton(
+                onPressed: () {
+                  if (widget.allowPassword == false) {
+                    widget.onPressed!();
+                  } else {
+                    onPasswordVisualize();
+                  }
+                },
+                icon: Icon(widget.suffixIcon),
+                splashRadius: 20,
+              ),
+        suffixIconColor: AppTheme.primary,
+        prefixIcon: widget.prefixIcon == null ? null : Icon(widget.prefixIcon),
+        prefixIconColor: AppTheme.primary,
         border: theme.border,
         focusedBorder: theme.focusedBorder,
         enabledBorder: theme.enabledBorder,
         floatingLabelStyle: theme.floatingLabelStyle,
         fillColor: theme.fillColor,
+        hoverColor: Colors.white,
       ),
+      inputFormatters: widget.inputFormatters,
+      maxLines: widget.maxLines ?? 1,
     );
   }
 }

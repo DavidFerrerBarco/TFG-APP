@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/services/services.dart';
+import 'package:my_app/constants/constants.dart';
+import 'package:my_app/models/models.dart';
+import 'package:my_app/providers/providers.dart';
 import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
 
@@ -8,24 +10,44 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final newsProvider = Provider.of<NewsService>(context).onDisplayNews;
+    final NewProvider newProvider = Provider.of<NewProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: const Text('News')),
       backgroundColor: const Color.fromARGB(227, 255, 255, 255),
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: ListView.builder(
-          itemCount: newsProvider.length,
-          itemBuilder: (context, index) {
-            return CardsNN(
-              hour: newsProvider[index].date,
-              title: newsProvider[index].title,
-              content: newsProvider[index].content,
-            );
-          },
-        ),
+      body: StreamBuilder(
+        stream: newProvider.getNoticias,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            List<News> noticias = snapshot.data!;
+            if (noticias != [defaultnews]) {
+              return SizedBox(
+                width: size.width,
+                height: size.height,
+                child: ListView.builder(
+                  itemCount: noticias.length,
+                  itemBuilder: (context, index) {
+                    return CardsNewsAnnounce(
+                      hour: noticias[index].date,
+                      title: noticias[index].title,
+                      content: noticias[index].content,
+                    );
+                  },
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  "NO HAY NOTICIAS",
+                  style: TextStyle(color: Colors.black, fontSize: 25),
+                ),
+              );
+            }
+          } else {
+            return const CustomCircularProgress();
+          }
+        },
       ),
     );
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/providers/providers.dart';
 import 'package:my_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'screens/screens.dart';
-import 'services/services.dart';
 
 void main() => runApp(const AppState());
 
@@ -14,28 +14,25 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AnnouncementService(),
-          lazy: false,
+          create: (_) => LoginProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => NewsService(),
-          lazy: false,
+          create: (_) => SplashProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => EmployeeService(),
-          lazy: false,
+          create: (_) => HomeProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => ScheduleService(),
-          lazy: false,
+          create: (_) => NewProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => TaskService(),
-          lazy: false,
+          create: (_) => AnnouncementProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => MessagesService(),
-          lazy: false,
+          create: (_) => EmployeesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(),
         ),
       ],
       child: const MyApp(),
@@ -58,7 +55,7 @@ class MyApp extends StatelessWidget {
         'home': (_) => const HomeScreen(),
         'messages': (_) => const MessagesScreen(),
         'news': (_) => const NewsScreen(),
-        'notifications': (_) => const NotificationScreen(),
+        'notifications': (_) => const AnnouncementScreen(),
         'task': (_) => const TaskScreen(),
         'chat': (_) => const ChatScreen(),
       },
