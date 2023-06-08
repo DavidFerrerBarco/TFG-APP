@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_app/constants/constants.dart';
 import 'package:my_app/models/models.dart';
+import 'package:my_app/providers/providers.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool _autorizacion = true;
@@ -112,6 +115,7 @@ class HomeProvider extends ChangeNotifier {
           final ScheduleModel scheduleResponse =
               ScheduleModel.fromJson(response.body);
           setHorarios(scheduleResponse.data);
+          setHorariosDelDia(_diaSeleccionado);
           yield true;
         }
       } else {
@@ -140,12 +144,57 @@ class HomeProvider extends ChangeNotifier {
         } else {
           final TaskModel taskResponse = TaskModel.fromJson(response.body);
           setTareas(taskResponse.data);
+          setTareasDelDia(_diaSeleccionado);
           yield true;
         }
       } else {
         setNewAuthorization(false);
         yield false;
       }
+    } catch (error) {
+      yield false;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  Stream<bool> putHours(Schedule horario) async* {
+    String hora = DateTime.now().toString().substring(11, 16);
+    int index = horario.realHours.indexWhere((element) => element == '--:--');
+
+    List<String> nuevaLista = horario.realHours;
+    nuevaLista[index] = hora;
+
+    try {
+      var url = Uri.http(baseUrl, '/api/schedule/${horario.id}');
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "realHours": nuevaLista,
+        }),
+      );
+      if (response.statusCode == 200) {
+        final ScheduleModel scheduleModel =
+            ScheduleModel.fromJson(response.body);
+        setHorarios(scheduleModel.data);
+        notifyListeners();
+        yield true;
+      } else {
+        yield false;
+      }
+    } catch (error) {
+      yield false;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+
+  Stream<bool> get logout async* {
+    try {
+      await SecureStorage().deleteSecureData('user');
+      yield true;
     } catch (error) {
       yield false;
     }

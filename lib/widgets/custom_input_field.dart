@@ -55,11 +55,12 @@ class _CustomInputFieldState extends State<CustomInputField> {
     final InputDecorationTheme theme = AppTheme.lightTheme.inputDecorationTheme;
 
     return TextFormField(
+      textAlignVertical: TextAlignVertical.top,
       readOnly: widget.readOnly ?? false,
       controller: widget.controller,
       style: const TextStyle(
           color: Colors.black, backgroundColor: Colors.white, fontSize: 18),
-      autofocus: true,
+      autofocus: false,
       textCapitalization: TextCapitalization.words,
       keyboardType: widget.keyboardType,
       obscureText: widget.isPassword,
@@ -100,6 +101,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
         floatingLabelStyle: theme.floatingLabelStyle,
         fillColor: theme.fillColor,
         hoverColor: Colors.white,
+        alignLabelWithHint: true,
       ),
       inputFormatters: widget.inputFormatters,
       maxLines: widget.maxLines ?? 1,

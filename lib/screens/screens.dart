@@ -1,3 +1,6 @@
+export 'package:my_app/screens/my_request_screen.dart';
+export 'package:my_app/screens/profile_screen.dart';
+export 'package:my_app/screens/request_screen.dart';
 export 'package:my_app/screens/chat_screen.dart';
 export 'package:my_app/screens/home_screen.dart';
 export 'package:my_app/screens/login_screen.dart';

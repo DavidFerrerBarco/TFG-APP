@@ -20,7 +20,8 @@ final Schedule defaultschedule = Schedule(
   id: "",
   employee: "",
   day: "",
-  hours: [""],
+  hours: [],
+  realHours: [],
   hoursCount: 0,
   v: 0,
 );
@@ -47,6 +48,15 @@ final Message defaultmessage = Message(
   sender: '',
   receiver: '',
   content: '',
+  date: '',
+  v: 0,
+);
+
+final Request defaultrequest = Request(
+  title: '',
+  content: '',
+  employee: '',
+  id: '',
   date: '',
   v: 0,
 );

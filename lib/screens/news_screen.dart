@@ -13,7 +13,7 @@ class NewsScreen extends StatelessWidget {
     final NewProvider newProvider = Provider.of<NewProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: const Text('News')),
+      appBar: AppBar(title: const Text('Noticias')),
       backgroundColor: const Color.fromARGB(227, 255, 255, 255),
       body: StreamBuilder(
         stream: newProvider.getNoticias,
@@ -22,13 +22,14 @@ class NewsScreen extends StatelessWidget {
               snapshot.hasData) {
             List<News> noticias = snapshot.data!;
             if (noticias != [defaultnews]) {
+              noticias = noticias.reversed.toList();
               return SizedBox(
                 width: size.width,
                 height: size.height,
                 child: ListView.builder(
                   itemCount: noticias.length,
                   itemBuilder: (context, index) {
-                    return CardsNewsAnnounce(
+                    return CustomCards(
                       hour: noticias[index].date,
                       title: noticias[index].title,
                       content: noticias[index].content,

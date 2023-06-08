@@ -1,3 +1,6 @@
+export 'package:my_app/providers/profile_provider.dart';
+export 'package:my_app/providers/request_provider.dart';
+export 'package:my_app/providers/task_provider.dart';
 export 'package:my_app/providers/chat_provider.dart';
 export 'package:my_app/providers/storage.dart';
 export 'package:my_app/providers/employees_provider.dart';

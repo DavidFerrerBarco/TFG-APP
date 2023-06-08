@@ -15,7 +15,7 @@ class AnnouncementScreen extends StatelessWidget {
     Employee empleado = ModalRoute.of(context)!.settings.arguments as Employee;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: const Text('Announcements')),
+      appBar: AppBar(title: const Text('Anuncio')),
       backgroundColor: const Color.fromARGB(227, 255, 255, 255),
       body: StreamBuilder(
         stream: announcementProvider.getAnuncios(empleado),
@@ -24,13 +24,14 @@ class AnnouncementScreen extends StatelessWidget {
               snapshot.hasData) {
             List<Announcement> anuncios = snapshot.data!;
             if (anuncios != [defaultannouncement]) {
+              anuncios = anuncios.reversed.toList();
               return SizedBox(
                 width: size.width,
                 height: size.height,
                 child: ListView.builder(
                   itemCount: anuncios.length,
                   itemBuilder: (context, index) {
-                    return CardsNewsAnnounce(
+                    return CustomCards(
                       hour: anuncios[index].date,
                       title: anuncios[index].title,
                       content: anuncios[index].content,

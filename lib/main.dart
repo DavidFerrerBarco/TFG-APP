@@ -34,6 +34,15 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ChatProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => TaskProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RequestProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfilerProvider(),
+        ),
       ],
       child: const MyApp(),
     );
@@ -58,6 +67,9 @@ class MyApp extends StatelessWidget {
         'notifications': (_) => const AnnouncementScreen(),
         'task': (_) => const TaskScreen(),
         'chat': (_) => const ChatScreen(),
+        'myrequest': (_) => const MyRequestScreen(),
+        'request': (_) => const RequestScreen(),
+        'profile': (_) => const ProfileScreen(),
       },
       theme: AppTheme.lightTheme,
     );

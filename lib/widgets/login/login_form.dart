@@ -55,7 +55,7 @@ class LoginForm extends StatelessWidget {
                     password.clear();
                     return;
                   }
-                  loginProvider.login(dni.text, password.text).then((value) {
+                  loginProvider.login(dni.text, password.text).listen((value) {
                     if (value) {
                       Navigator.pushReplacementNamed(context, 'splash');
                     }
@@ -65,10 +65,11 @@ class LoginForm extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: Center(
-                      child: Text(
-                    'Iniciar Sesión',
-                    style: AppTheme.lightTheme.textTheme.labelSmall,
-                  )),
+                    child: Text(
+                      'Iniciar Sesión',
+                      style: AppTheme.lightTheme.textTheme.labelSmall,
+                    ),
+                  ),
                 ),
               ),
             ],

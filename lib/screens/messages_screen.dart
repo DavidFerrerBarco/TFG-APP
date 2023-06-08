@@ -15,7 +15,7 @@ class MessagesScreen extends StatelessWidget {
     Employee empleado = ModalRoute.of(context)!.settings.arguments as Employee;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: const Text('Messages')),
+      appBar: AppBar(title: const Text('Mensajes')),
       body: StreamBuilder(
           stream: employeesProvider.getEmpleados(empleado),
           builder: (context, snapshot) {

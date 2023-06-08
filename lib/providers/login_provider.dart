@@ -7,7 +7,7 @@ import 'package:my_app/models/models.dart';
 import 'package:my_app/providers/storage.dart';
 
 class LoginProvider extends ChangeNotifier {
-  Future<bool> login(String dni, String password) async {
+  Stream<bool> login(String dni, String password) async* {
     var url = Uri.http(baseUrl, 'api/employee/login');
     try {
       final response = await http.post(
@@ -27,12 +27,12 @@ class LoginProvider extends ChangeNotifier {
         SecureStorage()
             .writeSecureData('user', jsonEncode(employeeModel.data[0]));
 
-        return true;
+        yield true;
       } else {
-        return false;
+        yield false;
       }
     } catch (error) {
-      return false;
+      yield false;
     }
   }
 }

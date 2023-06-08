@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_app/constants/constants.dart';
-import 'package:my_app/models/models.dart';
+import 'package:my_app/models/employee.dart';
 import 'package:my_app/providers/providers.dart';
 import 'package:my_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -17,15 +19,15 @@ class SplashScreen extends StatelessWidget {
       stream: splashProvider.loading,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          Employee employee = snapshot.data!;
-          if (employee == defaultemployee) {
+          String employee = snapshot.data!;
+          if (employee == jsonEncode(defaultemployee)) {
             SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
               Navigator.pushReplacementNamed(context, 'login');
             });
           } else {
             SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
               Navigator.pushReplacementNamed(context, 'home',
-                  arguments: employee);
+                  arguments: Employee.fromJson(employee));
             });
           }
         }

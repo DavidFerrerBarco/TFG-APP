@@ -19,11 +19,14 @@ class LoginContent extends StatelessWidget {
               style: AppTheme.lightTheme.textTheme.bodyLarge,
             ),
             const SizedBox(height: 100),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
               child: Text(
                 "Iniciar Sesión",
-                style: AppTheme.lightTheme.textTheme.bodyMedium,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    decoration: TextDecoration.none),
               ),
             ),
             Container(
