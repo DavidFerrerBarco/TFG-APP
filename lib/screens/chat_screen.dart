@@ -6,42 +6,76 @@ import 'package:provider/provider.dart';
 
 import '../models/models.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  List<Message> mensajes = [];
+
+  void setValue(List<Message> newList) {
+    setState(() {
+      mensajes = newList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Employee> empleado =
         ModalRoute.of(context)!.settings.arguments as List<Employee>;
     final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    Employee receiver = empleado[0];
-    Employee sender = empleado[1];
+    Employee sender = empleado[0];
+    Employee receiver = empleado[1];
+    final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
+    final Map<String, String> formValues = {
+      'content': '',
+    };
+    var message = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: ChatTopAppBar(sender: sender),
+        title: ChatTopAppBar(receiver: receiver),
       ),
       body: StreamBuilder(
         stream: chatProvider.getConversation(sender, receiver),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            List<Message> mensajes = snapshot.data!;
-            if (mensajes != [defaultmessage]) {
-              return const Text(
-                "AAAAAAAAAA",
-                style: TextStyle(color: Colors.black),
-              );
-            } else {
-              return const Center(
-                child: Text(
-                  "NO SE PUDO CARGAR LOS MENSAJES",
-                  style: TextStyle(color: Colors.black, fontSize: 25),
+          mensajes = snapshot.data ?? [];
+          mensajes = mensajes.reversed.toList();
+          if (mensajes != [defaultmessage]) {
+            return Column(
+              children: [
+                Expanded(
+                  child: CustomChatMessage(
+                    mensajes: mensajes,
+                    sender: sender,
+                    receiver: receiver,
+                  ),
                 ),
-              );
-            }
+                CustomBottomField(
+                  myFormKey: myFormKey,
+                  formValues: formValues,
+                  message: message,
+                  chatProvider: chatProvider,
+                  sender: sender,
+                  receiver: receiver,
+                  mensajes: mensajes,
+                  setValue: setValue,
+                ),
+              ],
+            );
           } else {
-            return const CustomCircularProgress();
+            return const Center(
+              child: Text(
+                "NO SE PUDO CARGAR LOS MENSAJES",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25,
+                ),
+              ),
+            );
           }
         },
       ),

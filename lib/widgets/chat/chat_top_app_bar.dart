@@ -6,10 +6,10 @@ import 'package:my_app/widgets/widgets.dart';
 class ChatTopAppBar extends StatelessWidget {
   const ChatTopAppBar({
     super.key,
-    required this.sender,
+    required this.receiver,
   });
 
-  final Employee sender;
+  final Employee receiver;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +22,14 @@ class ChatTopAppBar extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_rounded),
         ),
         CircularIconAvatar(
-          name: sender.name,
+          name: receiver.name,
           radius: 20,
           fontSize: 15,
           backgroundColor: Colors.white,
           textColor: AppTheme.primary,
         ),
         const SizedBox(width: 10),
-        Text(sender.name),
+        Text(receiver.name),
       ],
     );
   }
